@@ -2,6 +2,13 @@ body {
   font-family: sans-serif;
 }
 
+img {
+  max-width: 200px;
+  height: auto;
+
+  width: 200px;
+}
+
 header {
   text-align: center;
 }
@@ -50,8 +57,4 @@ td,
 th {
   padding: 5px 15px;
   border: 1px solid #ccc;
-}
-
-img {
-  width: 200px;
 }

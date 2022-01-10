@@ -1,11 +1,50 @@
-;(function (DOM) {
+;(function ($, doc) {
   'use strict'
 
-  function app() {
+  var app = (function appController() {
     return {
       init: function () {
         console.log('app init')
         this.companyInfo()
+        this.initEvents()
+      },
+
+      initEvents: function initEvents() {
+        $('[data-js="form-register"]').on('submit', this.handleSubmit)
+      },
+
+      handleSubmit: function handleSubmit(e) {
+        e.preventDefault()
+        console.log('submit')
+        var $tableCar = $('[data-js="table-car"]').get()
+        $tableCar.appendChild(app.createNewCar())
+      },
+
+      createNewCar: function createNewCar() {
+        const $fragment = doc.createDocumentFragment()
+        var $tr = doc.createElement('tr')
+        var $tdImage = doc.createElement('td')
+        var $image = document.createElement('img')
+        var $tdBrand = doc.createElement('td')
+        var $tdYear = doc.createElement('td')
+        var $tdPlate = doc.createElement('td')
+        var $tdColor = doc.createElement('td')
+
+        $image.setAttribute('src', $('[data-js="image"]').get().value)
+        $tdImage.appendChild($image)
+
+        $tdBrand.textContent = $('[data-js="brand-model"]').get().value
+        $tdYear.textContent = $('[data-js="year"]').get().value
+        $tdPlate.textContent = $('[data-js="plate"]').get().value
+        $tdColor.textContent = $('[data-js="color"]').get().value
+
+        $tr.appendChild($tdImage)
+        $tr.appendChild($tdBrand)
+        $tr.appendChild($tdYear)
+        $tr.appendChild($tdPlate)
+        $tr.appendChild($tdColor)
+
+        return $fragment.appendChild($tr)
       },
 
       companyInfo: function companyInfo() {
@@ -16,11 +55,13 @@
       },
 
       getCompanyInfo: function getCompanyInfo() {
-        if (!app().isReady.call(this)) return
+        if (!app.isReady.call(this)) {
+          return
+        }
 
         var data = JSON.parse(this.responseText)
-        var $companyName = new DOM('[data-js="company-name"')
-        var $companyPhone = new DOM('[data-js="company-phone"')
+        var $companyName = $('[data-js="company-name"').get()
+        var $companyPhone = $('[data-js="company-phone"').get()
         $companyName.textContent = data.name
         $companyPhone.textContent = data.phone
       },
@@ -29,10 +70,7 @@
         return this.readyState === 4 && this.status === 200
       }
     }
-  }
+  })()
 
-  app().init()
-
-  var $input = new DOM('input')
-  console.log($input instanceof DOM)
-})(window.DOM)
+  app.init()
+})(window.DOM, document)
